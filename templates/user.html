@@ -1,13 +1,32 @@
 {% extends "base.html" %}
-{% block title %}Secret{% endblock %}
+{% block title %}{{user.username}}'s Profile{% endblock %}
 {% block content %}
 <div class="card my-2 w-50 m-auto text-center">
-  <h2 class="card-header text-primary">{{user.first_name}} {{user.last_name}}</h2>
+  <h2 class="card-header text-primary">{{user.username}}</h2>
   <div class="card-body">
-    <h4 class="card-title">Username</h4>
-    <h6 class="card-subtitle text-muted">{{user.username}}</h6>
+    <h4 class="card-title">Name</h4>
+    <h6 class="card-subtitle text-muted">{{user.first_name}} {{user.last_name}}</h6>
     <h4 class="card-title mt-4">Email</h4>
     <h6 class="card-subtitle text-muted">{{user.email}}</h6>
+    <div class="mt-4">
+      <a href="" class="btn btn-sm btn-success mb-2">Add Feedback</a>
+      <form action="/users/{{user.username}}/delete" method="POST">
+        <input type="submit" value="Delete User" class="btn btn-sm btn-warning">
+      </form>
+    </div>
   </div>
+  {% if user.feedback %}
+  <h2 class="card-header text-primary mt-4">Feedback Given</h2>
+  <ul class="list-group list-group-flush">
+    {% for feedback in user.feedback %}
+    <li class="list-group-item">
+      <h5><strong>{{feedback.title}}</strong></h5>
+      <p>"{{feedback.content}}"</p>
+        <a href="" class="btn btn-link">Edit</a>
+        <a href="" class="btn btn-link">Delete</a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
 </div>
 {% endblock %}
