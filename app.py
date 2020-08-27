@@ -23,6 +23,9 @@ def show_index():
 # Secret Route
 @app.route("/secret")
 def show_secret():
+  if "username" not in session:
+    flash("Please log in first.", "warning")
+    return redirect("/login")
   return render_template("secret.html")
 
 # Registration Route
@@ -39,7 +42,7 @@ def register_user():
 
     # TODO: Add error handling for taken usernames and emails
     new_user = User.register(username, password, email, first_name, last_name)
-
+    session["username"] = new_user.username
     db.session.add(new_user)
     db.session.commit()
 
@@ -58,9 +61,17 @@ def login_user():
     password = form.password.data
     user = User.authenticate(username, password)
     if user:
+      session["username"] = user.username
       flash(f"Welcome Back, {user.username}!", "info")
       return redirect("/secret")
     else:
       form.username.errors = ["Invalid username or password."]
       
   return render_template("login.html", form=form)
+
+# Logout Route
+@app.route("/logout")
+def logout_user():
+  session.pop("username")
+  flash("Logged out successfully.", "info")
+  return redirect("/")
