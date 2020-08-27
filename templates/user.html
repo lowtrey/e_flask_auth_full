@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Secret{% endblock %}
+{% block content %}
+<div class="card my-2 w-50 m-auto text-center">
+  <h2 class="card-header text-primary">{{user.first_name}} {{user.last_name}}</h2>
+  <div class="card-body">
+    <h4 class="card-title">Username</h4>
+    <h6 class="card-subtitle text-muted">{{user.username}}</h6>
+    <h4 class="card-title mt-4">Email</h4>
+    <h6 class="card-subtitle text-muted">{{user.email}}</h6>
+  </div>
+</div>
+{% endblock %}

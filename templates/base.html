@@ -19,7 +19,7 @@
       <ul class="navbar-nav ml-auto">
         {% if "username" in session %}
         <li class="nav-item">
-          <a class="nav-link" href="/secret">Secret</a>
+          <a class="nav-link" href="/users/{{session["username"]}}">Profile</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/logout">Logout</a>

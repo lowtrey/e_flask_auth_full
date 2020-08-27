@@ -20,13 +20,15 @@ connect_db(app)
 def show_index():
   return redirect("/register")
 
-# Secret Route
-@app.route("/secret")
-def show_secret():
+# User Profile Route
+@app.route("/users/<username>")
+def show_user(username):
   if "username" not in session:
     flash("Please log in first.", "warning")
     return redirect("/login")
-  return render_template("secret.html")
+
+  user = User.query.filter_by(username=username).first()
+  return render_template("user.html", user=user)
 
 # Registration Route
 @app.route("/register", methods=["GET", "POST"])
@@ -47,7 +49,7 @@ def register_user():
     db.session.commit()
 
     flash("New User Created!", "success")
-    return redirect("/secret")
+    return redirect(f"/users/{username}")
   else:
     return render_template("register.html", form=form)
 
@@ -63,7 +65,7 @@ def login_user():
     if user:
       session["username"] = user.username
       flash(f"Welcome Back, {user.username}!", "info")
-      return redirect("/secret")
+      return redirect(f"/users/{user.username}")
     else:
       form.username.errors = ["Invalid username or password."]
       
