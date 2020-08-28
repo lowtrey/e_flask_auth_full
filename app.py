@@ -20,7 +20,7 @@ connect_db(app)
 def show_index():
   return redirect("/register")
 
-# User Profile Route
+# User Profile
 @app.route("/users/<username>")
 def show_user(username):
   if "username" not in session:
@@ -30,7 +30,7 @@ def show_user(username):
   user = User.query.filter_by(username=username).first()
   return render_template("user.html", user=user)
 
-# Registration Route
+# Register User
 @app.route("/register", methods=["GET", "POST"])
 def register_user():
   form = UserForm()
@@ -53,7 +53,7 @@ def register_user():
   else:
     return render_template("register.html", form=form)
 
-# Login Route
+# Login User
 @app.route("/login", methods=["GET", "POST"])
 def login_user():
   form = LoginForm()
@@ -71,9 +71,23 @@ def login_user():
       
   return render_template("login.html", form=form)
 
-# Logout Route
+# Logout User
 @app.route("/logout")
 def logout_user():
   session.pop("username")
   flash("Logged out successfully.", "info")
   return redirect("/")
+
+# Delete User
+@app.route("/users/<username>/delete", methods=["POST"])
+def delete_user(username):
+  if "username" not in session:
+    flash("You must be logged in to do that", "warning")
+    return redirect("/login")
+  else:
+    user = User.query.filter_by(username=username).first()
+    db.session.delete(user)
+    db.session.commit()
+    session.pop("username")
+    flash("User deleted successfully", "success")
+    return redirect("/")

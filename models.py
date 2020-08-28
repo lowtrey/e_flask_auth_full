@@ -23,6 +23,8 @@ class User(db.Model):
 
   last_name = db.Column(db.String(30), nullable=False)
 
+  feedback = db.relationship("Feedback", cascade="all,delete", backref="user")
+
   @classmethod
   def register(cls, username, password, email, first_name, last_name):
     hashed_password = bcrypt.generate_password_hash(password)
@@ -52,4 +54,4 @@ class Feedback(db.Model):
 
   username = db.Column(db.ForeignKey("users.username"))
 
-  user = db.relationship("User", backref="feedback")
+  # user = db.relationship("User", backref="feedback")
