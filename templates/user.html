@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{user.username}}'s Profile{% endblock %}
 {% block content %}
-<div class="card my-2 w-50 m-auto text-center">
+<div class="card my-2 m-auto text-center">
   <h2 class="card-header text-primary">{{user.username}}</h2>
   <div class="card-body">
     <h4 class="card-title">Name</h4>
@@ -9,7 +9,7 @@
     <h4 class="card-title mt-4">Email</h4>
     <h6 class="card-subtitle text-muted">{{user.email}}</h6>
     <div class="mt-4">
-      <a href="" class="btn btn-sm btn-success mb-2">Add Feedback</a>
+      <a href="/users/{{user.username}}/feedback/add" class="btn btn-sm btn-success mb-2">Add Feedback</a>
       <form action="/users/{{user.username}}/delete" method="POST">
         <input type="submit" value="Delete User" class="btn btn-sm btn-warning">
       </form>
