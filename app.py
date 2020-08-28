@@ -82,7 +82,7 @@ def logout_user():
 @app.route("/users/<username>/delete", methods=["POST"])
 def delete_user(username):
   if "username" not in session:
-    flash("You must be logged in to do that", "warning")
+    flash("You must be logged in to do that.", "warning")
     return redirect("/login")
   else:
     user = User.query.filter_by(username=username).first()
@@ -95,6 +95,10 @@ def delete_user(username):
 # Add Feedback
 @app.route("/users/<username>/feedback/add", methods=["GET", "POST"])
 def add_feedback(username):
+  if "username" not in session:
+    flash("You must be logged in to do that.", "warning")
+    return redirect("/login")
+
   form = FeedbackForm()
 
   if form.validate_on_submit():
@@ -105,9 +109,38 @@ def add_feedback(username):
 
     db.session.add(new_feedback)
     db.session.commit()
-    
+
     flash("New Feedback Given!", "info")
     return redirect(f"/users/{username}")
 
   else:
     return render_template("add_feedback_form.html", form=form)
+
+# Edit Feedback
+@app.route("/feedback/<int:id>/update", methods=["GET", "POST"])
+def edit_feedback(id):
+  if "username" not in session:
+    flash("You must be logged in to do that.", "warning")
+    return redirect("/login")
+
+  feedback = Feedback.query.get_or_404(id)
+  current_username = session["username"]
+
+  if feedback.username != current_username:
+    flash("You don't have permission to do that.", "warning")
+    return redirect(f"/users/{current_username}")
+
+  form = FeedbackForm(obj=feedback)
+
+  if form.validate_on_submit():
+    feedback.title = form.title.data
+    feedback.content = form.content.data
+
+    db.session.add(feedback)
+    db.session.commit()
+
+    flash("Feedback updated successfully.", "success")
+    return redirect(f"/users/{current_username}")
+
+  else:
+    return render_template("edit_feedback_form.html", form=form)
