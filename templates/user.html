@@ -23,7 +23,9 @@
       <h5><strong>{{feedback.title}}</strong></h5>
       <p>"{{feedback.content}}"</p>
         <a href="/feedback/{{feedback.id}}/update" class="btn btn-link">Edit</a>
-        <a href="" class="btn btn-link">Delete</a>
+        <form action="/feedback/{{feedback.id}}/delete" method="POST" class="d-inline">
+          <button type="submit" class="btn btn-link">Delete</button>
+        </form>
     </li>
     {% endfor %}
   </ul>

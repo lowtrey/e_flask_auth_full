@@ -92,7 +92,7 @@ def delete_user(username):
     flash("User deleted successfully", "success")
     return redirect("/")
 
-# Add Feedback
+# CREATE Feedback
 @app.route("/users/<username>/feedback/add", methods=["GET", "POST"])
 def add_feedback(username):
   if "username" not in session:
@@ -116,7 +116,7 @@ def add_feedback(username):
   else:
     return render_template("add_feedback_form.html", form=form)
 
-# Edit Feedback
+# Update Feedback
 @app.route("/feedback/<int:id>/update", methods=["GET", "POST"])
 def edit_feedback(id):
   if "username" not in session:
@@ -144,3 +144,23 @@ def edit_feedback(id):
 
   else:
     return render_template("edit_feedback_form.html", form=form)
+
+# DELETE Feedback
+@app.route("/feedback/<int:id>/delete", methods=["POST"])
+def delete_feedback(id):
+  if "username" not in session:
+    flash("You must be logged in to do that.", "warning")
+    return redirect("/login")
+
+  feedback = Feedback.query.get_or_404(id)
+  current_username = session["username"]
+
+  if feedback.username != current_username:
+    flash("You don't have permission to do that.", "warning")
+    return redirect(f"/users/{current_username}")
+
+  db.session.delete(feedback)
+  db.session.commit()
+
+  flash("Feedback deleted.", "info")
+  return redirect(f"/users/{current_username}")
