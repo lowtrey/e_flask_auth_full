@@ -9,9 +9,9 @@
     <h4 class="card-title mt-4">Email</h4>
     <h6 class="card-subtitle text-muted">{{user.email}}</h6>
     <div class="mt-4">
-      <a href="/users/{{user.username}}/feedback/add" class="btn btn-sm btn-success mb-2">Add Feedback</a>
+      <a href="/users/{{user.username}}/feedback/add" class="btn btn-sm btn-outline-primary mb-2">Add Feedback</a>
       <form action="/users/{{user.username}}/delete" method="POST">
-        <input type="submit" value="Delete User" class="btn btn-sm btn-warning">
+        <input type="submit" value="Delete User" class="btn btn-sm btn-outline-danger">
       </form>
     </div>
   </div>

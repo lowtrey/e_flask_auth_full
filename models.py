@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask import session, flash
 from flask_bcrypt import Bcrypt
 
 db = SQLAlchemy()
@@ -41,6 +42,13 @@ class User(db.Model):
     else:
       return False
 
+  def is_invalid():
+    if "username" not in session:
+      flash("You must be logged in to do that.", "warning")
+      return True
+    else:
+      return False
+
 
 class Feedback(db.Model):
 
@@ -54,4 +62,16 @@ class Feedback(db.Model):
 
   username = db.Column(db.ForeignKey("users.username"))
 
-  # user = db.relationship("User", backref="feedback")
+  @classmethod
+  def create(cls, username, formObject):
+    title = formObject.title.data
+    content = formObject.content.data
+    return cls(title=title, content=content, username=username)
+
+  
+  def is_owned_by(self, username):
+    if self.username == username:
+      return True
+    else:
+      flash("You don't have permission to do that.", "warning")
+      return False
